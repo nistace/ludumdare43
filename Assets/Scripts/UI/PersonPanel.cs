@@ -28,7 +28,9 @@ public class PersonPanel : MonoBehaviour
 			this.Pic.sprite = Resources.Load<Sprite>("Images/Pics/" + this.character.characterName);
 			this.nameText.text = this.character.characterName;
 			this.healthText.text = this.character.Health.Display() + "/" + this.character.maxHealth;
+			this.hungerText.color = this.character.Health < this.character.maxHealth / 5 ? GameController.UiWarningTextColor : GameController.UiDefaultTextColor;
 			this.hungerText.text = this.character.hungry ? "Hungry" : "Fed";
+			this.hungerText.color = this.character.hungry ? GameController.UiWarningTextColor : GameController.UiDefaultTextColor;
 		}
 	}
 
@@ -40,7 +42,7 @@ public class PersonPanel : MonoBehaviour
 
 	public void GiveFullRation()
 	{
-		GameController.Instance.GiveSmallRation(this.character);
+		GameController.Instance.GiveFullRation(this.character);
 	}
 
 }

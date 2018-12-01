@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class CarPanel : MonoBehaviour
 {
-	public Color colorOnOk = Color.black;
-	public Color colorOnKo = new Color(.5f, 0, 0);
 	public Text capacityText;
 	public Text foodText;
 	public Text fuelText;
@@ -19,7 +17,7 @@ public class CarPanel : MonoBehaviour
 	{
 		int totalStored = GameController.Instance.rations + GameController.Instance.fuel;
 		this.capacityText.text = totalStored + " / " + GameController.Instance.GetStorageCapacity();
-		this.capacityText.color = totalStored <= GameController.Instance.GetStorageCapacity() ? this.colorOnOk : this.colorOnKo;
+		this.capacityText.color = totalStored <= GameController.Instance.GetStorageCapacity() ? GameController.UiDefaultTextColor : GameController.UiWarningTextColor;
 		this.foodText.text = GameController.Instance.rations.ToString();
 		this.fuelText.text = GameController.Instance.fuel.ToString();
 		this.foodLeftBehindText.text = GameController.Instance.rationsLeftBehind.ToString();

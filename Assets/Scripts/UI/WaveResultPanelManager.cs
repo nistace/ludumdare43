@@ -11,6 +11,7 @@ public class WaveResultPanelManager : MonoBehaviour
 	public PersonPanel[] personPanels;
 	public PersonPanel playerPanel;
 	public CarPanel carPanel;
+	public ContinuePanel continuePanel;
 	public Text waveTitle;
 	private Animator anim;
 
@@ -19,6 +20,7 @@ public class WaveResultPanelManager : MonoBehaviour
 		this.anim = this.GetComponent<Animator>();
 		GameController.Instance.OnGameDataChanged += this.UpdateContent;
 		GameController.Instance.OnWaveFinished += this.Show;
+		GameController.Instance.OnGotoNextHalt += this.Hide;
 	}
 
 	private void Show()
@@ -36,6 +38,7 @@ public class WaveResultPanelManager : MonoBehaviour
 		this.waveTitle.text = "Wave " + GameController.Instance.Wave + " cleared !";
 		this.playerPanel.UpdateCharacter(-1, GameController.Instance.player);
 		this.carPanel.UpdateContent();
+		this.continuePanel.UpdateContent();
 		int i = 0;
 		while (i < GameController.Instance.otherCharacters.Length)
 		{

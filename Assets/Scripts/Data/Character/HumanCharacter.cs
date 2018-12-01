@@ -31,6 +31,8 @@ public class HumanCharacter : MonoBehaviour, IZombieDamageable, IBulletDamageabl
 
 	public void Update()
 	{
+		if (this.Health <= 0)
+			this.Die();
 		if (this.transform.position.sqrMagnitude > this.sqrAllowedRadiusAroundCar)
 			this.transform.position = this.transform.position.normalized * this.allowedRadiusAroundCar;
 	}
@@ -38,8 +40,6 @@ public class HumanCharacter : MonoBehaviour, IZombieDamageable, IBulletDamageabl
 	public void TakeZombieDamages(float damage)
 	{
 		this.Health -= damage;
-		if (this.Health == 0)
-			this.Die();
 	}
 
 	public void TakeBulletDamages(float damage)

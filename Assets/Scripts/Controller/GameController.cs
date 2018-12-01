@@ -10,6 +10,8 @@ public class GameController : MonoBehaviour
 	public static GameController Instance { get; private set; }
 	public static BulletPool BulletPool { get { return Instance.bulletPool; } }
 	public static ZombiePool ZombiePool { get { return Instance.zombiePool; } }
+	public static Color UiWarningTextColor { get { return Instance.uiWarningTextColor; } }
+	public static Color UiDefaultTextColor { get { return Instance.uiDefaultTextColor; } }
 
 	public BulletPool bulletPool;
 	public ZombiePool zombiePool;
@@ -46,6 +48,9 @@ public class GameController : MonoBehaviour
 		}
 	}
 
+	public Color uiDefaultTextColor = Color.black;
+	public Color uiWarningTextColor = new Color(.5f, 0, 0);
+
 	public int rations;
 	public int rationsLeftBehind;
 	public int lootedRations;
@@ -67,6 +72,7 @@ public class GameController : MonoBehaviour
 
 	public event Action OnGameDataChanged = delegate { };
 	public event Action OnWaveFinished = delegate { };
+	public event Action OnGotoNextHalt = delegate { };
 
 	public void Awake()
 	{
@@ -87,6 +93,7 @@ public class GameController : MonoBehaviour
 	public void GameOver(string reason)
 	{
 		this.playerControls.enabled = false;
+		Time.timeScale = 0;
 		this.OnGameOver(reason, this.Miles);
 	}
 
@@ -104,17 +111,24 @@ public class GameController : MonoBehaviour
 		}
 	}
 
+	private void UpdateOtherCharacters()
+	{
+		this.otherCharacters = this.otherCharacters.ToList().Where(t => !t.IsDestroyed()).ToArray();
+	}
+
 	private void OnWaveLastZombieKilled()
 	{
 		this.playerControls.enabled = false;
 		this.player.hungry = true;
-		this.otherCharacters = this.otherCharacters.ToList().Where(t => !t.IsDestroyed()).ToArray();
+		this.UpdateOtherCharacters();
 		float lootLowerBound = Mathf.Max(0, -1.5f * this.Wave + 16);
 		float lootUpperBound = 1 + 30 / Mathf.Sqrt(this.Wave);
-		this.lootedRations += (int)UnityEngine.Random.Range(lootLowerBound, lootUpperBound);
-		this.lootedFuel += (int)UnityEngine.Random.Range(lootLowerBound, lootUpperBound);
+		this.lootedRations = 2 + (int)(UnityEngine.Random.Range(lootLowerBound, lootUpperBound) / 4);
+		this.lootedFuel = 1 + (int)(UnityEngine.Random.Range(lootLowerBound, lootUpperBound) * 3);
 		this.rations += this.lootedRations;
 		this.fuel += this.lootedFuel;
+		this.fuelLeftBehind = 0;
+		this.rationsLeftBehind = 0;
 		foreach (HumanCharacter c in this.otherCharacters)
 		{
 			c.hungry = true;
@@ -124,13 +138,27 @@ public class GameController : MonoBehaviour
 		this.OnWaveFinished();
 	}
 
+	internal bool IsContinueAllowed()
+	{
+		return this.rations + this.fuel <= this.GetStorageCapacity();
+	}
+
 	public void GotoNextHalt()
 	{
-		this.playerControls.enabled = true;
-		this.Miles += 1;
-		this.Wave++;
-		this.WaveRemainingTime = 30;
-		this.zombieSpawner.frequency = 1;
+		if (this.IsContinueAllowed())
+		{
+			if (this.player.hungry) this.player.Health = (int)(this.player.Health / 2);
+			foreach (HumanCharacter c in this.otherCharacters)
+				if (c.hungry) c.Health = (int)(this.player.Health / 2);
+			this.UpdateOtherCharacters();
+			this.OnGotoNextHalt();
+			this.Miles += UnityEngine.Random.Range(this.fuel * 2f, this.fuel * 2.5f);
+			this.fuel = 0;
+			this.Wave++;
+			this.WaveRemainingTime = 30;
+			this.zombieSpawner.frequency = this.Wave / 2f;
+			this.playerControls.enabled = true;
+		}
 	}
 
 	public void LaunchWave()
