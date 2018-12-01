@@ -10,13 +10,15 @@ public class HumanCharacter : MonoBehaviour, IZombieDamageable, IBulletDamageabl
 	private Animator anim;
 	public float allowedRadiusAroundCar = 3;
 	private float sqrAllowedRadiusAroundCar;
+	public string characterName;
 	public float maxHealth;
 	private float _health;
 	public float Health
 	{
 		get { return this._health; }
-		set { this._health = value; this.OnHealthChanged(this._health); }
+		set { this._health = Mathf.Min(value, this.maxHealth); this.OnHealthChanged(this._health); }
 	}
+	public bool hungry = true;
 
 	public event Action<float> OnHealthChanged = delegate { };
 

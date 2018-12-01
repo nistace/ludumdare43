@@ -9,6 +9,7 @@ public class Pool<T> : MonoBehaviour where T : UnityEngine.Object, IPoolable
 	private readonly List<T> inactivePool = new List<T>();
 	private readonly List<T> activePool = new List<T>();
 	public float deathTimeBeforeDeactivation = 1;
+	public int CountActive { get { return this.activePool.Count; } }
 
 	protected T GetNew()
 	{

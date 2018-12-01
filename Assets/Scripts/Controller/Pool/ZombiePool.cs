@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ZombiePool : Pool<Zombie>
 {
+
 	public Zombie Instantiate(Vector3 position, Quaternion rotation)
 	{
 		Zombie instance = this.GetNew();
