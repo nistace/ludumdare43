@@ -193,6 +193,7 @@ GameObject:
   - component: {fileID: 305285106}
   - component: {fileID: 305285105}
   - component: {fileID: 305285104}
+  - component: {fileID: 305285108}
   m_Layer: 5
   m_Name: MenuCanvas
   m_TagString: Untagged
@@ -278,6 +279,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &305285108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 305285103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d936f7caf8f0a0c488ca16a49226cce5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &331705407
 GameObject:
   m_ObjectHideFlags: 0
@@ -581,7 +593,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1901635180}
+      - m_Target: {fileID: 305285108}
         m_MethodName: StartGame
         m_Mode: 1
         m_Arguments:
