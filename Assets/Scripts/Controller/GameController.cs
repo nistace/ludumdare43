@@ -50,6 +50,7 @@ public class GameController : MonoBehaviour
 
 	public Color uiDefaultTextColor = Color.black;
 	public Color uiWarningTextColor = new Color(.5f, 0, 0);
+	public Vector2 startPosition = Vector2.right * 2.5f;
 
 	public int rations;
 	public int rationsLeftBehind;
@@ -113,6 +114,7 @@ public class GameController : MonoBehaviour
 
 	private void UpdateOtherCharacters()
 	{
+		this.otherCharacters.ToList().Where(t => t.IsDestroyed()).ToList().ForEach(t => Destroy(t.gameObject));
 		this.otherCharacters = this.otherCharacters.ToList().Where(t => !t.IsDestroyed()).ToArray();
 	}
 
@@ -123,8 +125,8 @@ public class GameController : MonoBehaviour
 		this.UpdateOtherCharacters();
 		float lootLowerBound = Mathf.Max(0, -1.5f * this.Wave + 16);
 		float lootUpperBound = 1 + 30 / Mathf.Sqrt(this.Wave);
-		this.lootedRations = 2 + (int)(UnityEngine.Random.Range(lootLowerBound, lootUpperBound) / 4);
-		this.lootedFuel = 1 + (int)(UnityEngine.Random.Range(lootLowerBound, lootUpperBound) * 3);
+		this.lootedRations = 2 + (int)(UnityEngine.Random.Range(lootLowerBound, lootUpperBound) / 6);
+		this.lootedFuel = 1 + (int)(UnityEngine.Random.Range(lootLowerBound, lootUpperBound) * 1.8);
 		this.rations += this.lootedRations;
 		this.fuel += this.lootedFuel;
 		this.fuelLeftBehind = 0;
@@ -147,17 +149,32 @@ public class GameController : MonoBehaviour
 	{
 		if (this.IsContinueAllowed())
 		{
-			if (this.player.hungry) this.player.Health = (int)(this.player.Health / 2);
+			if (this.player.hungry) this.player.Health -= Math.Max(5, (int)(player.Health / 2));
 			foreach (HumanCharacter c in this.otherCharacters)
-				if (c.hungry) c.Health = (int)(this.player.Health / 2);
+				if (c.hungry) c.Health -= Math.Max(5, (int)(c.Health / 2));
 			this.UpdateOtherCharacters();
-			this.OnGotoNextHalt();
+			this.RepositionateTeamMembers();
 			this.Miles += UnityEngine.Random.Range(this.fuel * 2f, this.fuel * 2.5f);
 			this.fuel = 0;
 			this.Wave++;
 			this.WaveRemainingTime = 30;
-			this.zombieSpawner.frequency = this.Wave / 2f;
+			this.zombieSpawner.frequency = .5f + this.Wave;
+			this.OnGotoNextHalt();
 			this.playerControls.enabled = true;
+		}
+	}
+
+	private void RepositionateTeamMembers()
+	{
+		List<HumanCharacter> charactersToPlace = new List<HumanCharacter>(this.otherCharacters);
+		charactersToPlace.Add(this.player);
+		float angle = 360 / charactersToPlace.Count;
+		for (Vector2 position = this.startPosition; charactersToPlace.Count > 0; position = position.Rotate(angle))
+		{
+			int randomCharacterIndex = UnityEngine.Random.Range(0, charactersToPlace.Count - 1);
+			HumanCharacter c = charactersToPlace[randomCharacterIndex];
+			charactersToPlace.RemoveAt(randomCharacterIndex);
+			c.transform.position = position;
 		}
 	}
 

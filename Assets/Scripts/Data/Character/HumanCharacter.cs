@@ -51,8 +51,11 @@ public class HumanCharacter : MonoBehaviour, IZombieDamageable, IBulletDamageabl
 	{
 		this.anim.SetTrigger("Die");
 		Destroy(this.GetComponent<Collider2D>());
+		this.GetComponent<Shooter>().enabled = false;
 		if (this.GetComponent<ControlsManager>() != null)
 			GameController.Instance.GameOver("You died");
+		else
+			this.GetComponent<AICharacter>().enabled = false;
 	}
 
 	public Transform Transform()

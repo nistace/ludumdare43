@@ -13,4 +13,12 @@ public static class VectorsExtension
 		if (v.x > 0) angle = 360 - angle;
 		return angle;
 	}
+
+	public static Vector2 Rotate(this Vector2 v, float degAngle)
+	{
+		float radAngle = degAngle * Mathf.Deg2Rad;
+		float sin = Mathf.Sin(radAngle);
+		float cos = Mathf.Cos(radAngle);
+		return new Vector2(cos * v.x - sin * v.y, sin * v.x + cos * v.y);
+	}
 }
