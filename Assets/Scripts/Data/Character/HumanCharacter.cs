@@ -20,6 +20,9 @@ public class HumanCharacter : MonoBehaviour, IZombieDamageable, IBulletDamageabl
 	}
 	public bool hungry = true;
 
+	public string[] prosKeepAlive;
+	public string[] consKeepAlive;
+
 	public event Action<float> OnHealthChanged = delegate { };
 
 	public void Awake()

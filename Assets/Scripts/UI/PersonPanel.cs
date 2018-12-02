@@ -12,6 +12,7 @@ public class PersonPanel : MonoBehaviour
 	public Text nameText;
 	public Text healthText;
 	public Text hungerText;
+	public ConfirmSacrificePanelManager confirmSacrificePanel;
 
 	public void UpdateCharacter(int i, HumanCharacter character)
 	{
@@ -43,6 +44,11 @@ public class PersonPanel : MonoBehaviour
 	public void GiveFullRation()
 	{
 		GameController.Instance.GiveFullRation(this.character);
+	}
+
+	public void Sacrifice()
+	{
+		this.confirmSacrificePanel.Show(this.character);
 	}
 
 }

@@ -17,6 +17,8 @@ public class GameController : MonoBehaviour
 	public ZombiePool zombiePool;
 
 	private ZombieSpawner zombieSpawner;
+
+
 	private float _miles = 0;
 	public float Miles
 	{
@@ -251,5 +253,16 @@ public class GameController : MonoBehaviour
 	public int GetStorageCapacity()
 	{
 		return 70 - this.otherCharacters.Length * 10;
+	}
+
+	public void Sacrifice(HumanCharacter character)
+	{
+		if (!character.IsDestroyed())
+		{
+			character.Health = 0;
+			this.UpdateOtherCharacters();
+			this.rations += 9;
+			this.OnGameDataChanged();
+		}
 	}
 }
