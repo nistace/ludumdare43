@@ -10,8 +10,11 @@ public class ZombieCustomEditor : Editor
 	{
 		Zombie zombie = (Zombie)target;
 
-		Handles.color = zombie.targetWithinRange ? Color.red : Color.yellow;
-		Handles.DrawLine(zombie.transform.position, zombie.target.Transform().position);
+		if (zombie.target != null)
+		{
+			Handles.color = zombie.targetWithinRange ? Color.red : Color.yellow;
+			Handles.DrawLine(zombie.transform.position, zombie.target.Transform().position);
+		}
 
 	}
 }

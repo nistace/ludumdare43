@@ -131,10 +131,9 @@ public class GameController : MonoBehaviour
 		this.player.hungry = true;
 		this.car.StopAlarm();
 		this.UpdateOtherCharacters();
-		float lootLowerBound = Mathf.Max(0, -1.5f * this.Wave + 16);
 		float lootUpperBound = 1 + 30 / Mathf.Sqrt(this.Wave);
-		this.lootedRations = 2 + (int)(UnityEngine.Random.Range(lootLowerBound, lootUpperBound) / 6);
-		this.lootedFuel = 1 + (int)(UnityEngine.Random.Range(lootLowerBound, lootUpperBound) * 1.8);
+		this.lootedRations = 1 + (int)(UnityEngine.Random.Range(Mathf.Max(0, -1.5f * this.Wave + 16), lootUpperBound) / 8);
+		this.lootedFuel = 1 + (int)(UnityEngine.Random.Range(Mathf.Max(0, -2f * this.Wave + 8), lootUpperBound) * 1.8);
 		this.rations += this.lootedRations;
 		this.fuel += this.lootedFuel;
 		this.fuelLeftBehind = 0;
@@ -174,12 +173,11 @@ public class GameController : MonoBehaviour
 
 	private void RepositionateTeamMembers()
 	{
-		List<HumanCharacter> charactersToPlace = new List<HumanCharacter>(this.otherCharacters);
-		charactersToPlace.Add(this.player);
+		List<HumanCharacter> charactersToPlace = new List<HumanCharacter>(this.otherCharacters) { this.player };
 		float angle = 360 / charactersToPlace.Count;
 		for (Vector2 position = this.startPosition; charactersToPlace.Count > 0; position = position.Rotate(angle))
 		{
-			int randomCharacterIndex = UnityEngine.Random.Range(0, charactersToPlace.Count - 1);
+			int randomCharacterIndex = UnityEngine.Random.Range(0, charactersToPlace.Count);
 			HumanCharacter c = charactersToPlace[randomCharacterIndex];
 			charactersToPlace.RemoveAt(randomCharacterIndex);
 			c.transform.position = position;
@@ -193,6 +191,7 @@ public class GameController : MonoBehaviour
 			MusicManager.Instance.PlayFast();
 			this.zombieSpawner.active = true;
 			this.waveIsActive = true;
+			this.car.StartAlarm();
 			this.OnLaunchWave();
 		}
 	}

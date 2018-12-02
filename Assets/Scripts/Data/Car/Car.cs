@@ -33,8 +33,6 @@ public class Car : MonoBehaviour, IBulletDamageable, IZombieDamageable
 		if (this.IsDestroyed()) return;
 		this.Damage(damage);
 		GameController.Instance.LaunchWave();
-		this.audio.Play();
-		this.anim.SetBool("Alarm", true);
 	}
 
 	public void TakeZombieDamages(float damage)
@@ -57,6 +55,12 @@ public class Car : MonoBehaviour, IBulletDamageable, IZombieDamageable
 	{
 		this.anim.SetBool("Alarm", false);
 		this.audio.Stop();
+	}
+
+	public void StartAlarm()
+	{
+		this.audio.Play();
+		this.anim.SetBool("Alarm", true);
 	}
 
 	public Transform Transform()

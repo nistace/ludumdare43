@@ -48,7 +48,7 @@ public class Zombie : MonoBehaviour, IBulletDamageable, IPoolable
 		}
 		if (this.target == null || this.target.IsDestroyed())
 			this.target = this.sight.Closest;
-		if (this.target == null)
+		if (this.target == null || this.target.IsDestroyed())
 			this.target = GameController.Instance.car;
 		if (this.moving)
 		{

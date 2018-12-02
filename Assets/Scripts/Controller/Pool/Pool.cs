@@ -21,7 +21,7 @@ public class Pool<T> : MonoBehaviour where T : UnityEngine.Object, IPoolable
 		}
 		else
 		{
-			T prefab = this.prefabs[UnityEngine.Random.Range(0, this.prefabs.Length - 1)];
+			T prefab = this.prefabs[UnityEngine.Random.Range(0, this.prefabs.Length)];
 			instance = Instantiate(prefab, this.transform);
 		}
 		this.activePool.Add(instance);
