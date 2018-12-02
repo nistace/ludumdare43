@@ -77,6 +77,7 @@ public class GameController : MonoBehaviour
 	public event Action OnWaveFinished = delegate { };
 	public event Action OnGotoNextHalt = delegate { };
 	public event Action OnLaunchWave = delegate { };
+	public event Action<TextAsset> OnDialogScript = delegate { };
 
 	public void Awake()
 	{
@@ -167,8 +168,32 @@ public class GameController : MonoBehaviour
 			this.WaveRemainingTime = 30;
 			this.zombieSpawner.frequency = this.Wave / 2 + (this.otherCharacters.Length + 1) / 2;
 			this.OnGotoNextHalt();
-			this.playerControls.enabled = true;
+			if (!this.CheckWaveScript())
+			{
+				this.StartNextHalt();
+			}
 		}
+	}
+
+	/** <summary>If there is a script to play before the wave, the event will be triggered and the function will return true</summary>**/
+	private bool CheckWaveScript()
+	{
+		if (this.Wave == 1)
+		{
+			this.OnDialogScript(Resources.Load<TextAsset>("Dialogs/intro"));
+			return true;
+		}
+		return false;
+	}
+
+	public void OnEndOfWaveScript()
+	{
+		this.StartNextHalt();
+	}
+
+	public void StartNextHalt()
+	{
+		this.playerControls.enabled = true;
 	}
 
 	private void RepositionateTeamMembers()

@@ -1,0 +1,61 @@
+text -n:Bill -t:Family! Wake up! 
+wait .2
+text -n:Wife -t:What's going on?
+text -n:Bill -t:Zombie apocalypse just started!
+wait .2
+text -n:Wife -t:Seriously? Sounds like the opening of a very bad horror movie...
+text -n:Bill -t:Yeah, but you know...
+wait .1
+text -n:Bill -t:Can't do much in 48 hours.
+wait .2
+text -s:.03 -n:Wife -t:What?
+text -s:.03 -n:Bill -t:What?
+wait .6
+text -n:Wife -t:Anyway, what should we do?
+wait .2
+text -n:Bill -t:Everybody in the car, we need to go!
+text -n:Wife -t:To go where?
+text -n:Bill -t:North.
+wait .2
+text -n:Wife -t:Why north?
+wait .2
+text -s:.2 -n:Bill -t:...
+text -n:Bill -t:Ok. East.
+wait .2
+text -s:.2 -n:Wife -t:...
+wait 1
+text -n:Bill -t:Go and get Kathy and the dog.
+wait .2
+text -n:Bill -t:I will start the car and unfortunatly meet our pain-in-the-ass neighbour and his gorgeous girlfriend so we are 6 to go on the adventure.
+text -s:.2 -n:Wife -t:What the...
+wait .5
+text -n:Bill -t:Hurry!
+wait .5
+fade .8
+wait .2
+text -n:Carl -t:We won't go far with that low fuel...
+wait .2
+text -n:Kathy -t:Daddy... I'm hungry...
+text -n:Carl -t:Kid's right! We need food too!
+wait .2
+text -n:Bill -t:It's ok! We only need to stop at some point and replenish our resources.
+wait .2
+text -n:Bill -t:Also, I read in People Magazine "Human Meat Is Very Nourishing".
+text -s:.03 -n:Kathy -t:What?
+text -s:.03 -n:Carl -t:What?
+text -s:.03 -n:Wife -t:What?
+text -s:.03 -n:Toby -t:Woof?
+wait .2
+text -n:Bill -t:Just kidding!
+wait .5
+text -n:Carl -t:There is a station down this road, stop there and we'll help ourselves.
+wait .2
+text -n:Bill -t:Good idea! Toby can go and pick everything while we make noise at the car to attract the surrounding zombies.
+text -s:.1 -n:Wife -t:That's a stupid idea.
+wait .2
+text -n:Carl -t:How will you make noise anyway?
+text -n:Bill -t:I will shoot the car to trigger the alarm.
+text -s:.06 -n:Wife -t:That's an even STUPIDER idea.
+wait .5
+fade .8
+wait .2

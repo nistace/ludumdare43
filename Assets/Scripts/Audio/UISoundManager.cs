@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,4 +36,8 @@ public class UISoundManager : SoundLibrary
 		else this.PlayKo();
 	}
 
+	internal void PlayTyping()
+	{
+		this.Play("typing" + UnityEngine.Random.Range(1, 3));
+	}
 }
