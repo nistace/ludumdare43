@@ -37,17 +37,18 @@ public class PersonPanel : MonoBehaviour
 
 	public void GiveSmallRation()
 	{
-		GameController.Instance.GiveSmallRation(this.character);
+		UISoundManager.Instance.PlayButtonSound(GameController.Instance.GiveSmallRation(this.character));
 	}
 
 
 	public void GiveFullRation()
 	{
-		GameController.Instance.GiveFullRation(this.character);
+		UISoundManager.Instance.PlayButtonSound(GameController.Instance.GiveFullRation(this.character));
 	}
 
 	public void Sacrifice()
 	{
+		UISoundManager.Instance.PlayOk();
 		this.confirmSacrificePanel.Show(this.character);
 	}
 

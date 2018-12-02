@@ -10,6 +10,7 @@ public class GamePanelManager : MonoBehaviour
 	public Text waveCount;
 	public Text milesText;
 	public Text timerText;
+	public Text ShootToStartText;
 
 	void Start()
 	{
@@ -18,11 +19,23 @@ public class GamePanelManager : MonoBehaviour
 		GameController.Instance.OnMilesChanged += this.UpdateMiles;
 		GameController.Instance.OnWaveCountChanged += this.UpdateWaveCount;
 		GameController.Instance.OnWaveRemainingTimeChanged += this.UpdateWaveRemainingTime;
+		GameController.Instance.OnGotoNextHalt += this.ShowShootToStartText;
+		GameController.Instance.OnLaunchWave += this.HideShootToStartText;
 		this.UpdateCarHealth(GameController.Instance.car.Health);
 		this.UpdatePlayerHealth(GameController.Instance.player.Health);
 		this.UpdateWaveCount(GameController.Instance.Wave);
 		this.UpdateMiles(GameController.Instance.Miles);
 		this.UpdateWaveRemainingTime(GameController.Instance.WaveRemainingTime);
+	}
+
+	private void ShowShootToStartText()
+	{
+		this.ShootToStartText.gameObject.SetActive(true);
+	}
+
+	private void HideShootToStartText()
+	{
+		this.ShootToStartText.gameObject.SetActive(false);
 	}
 
 	private void UpdateCarHealth(float value)

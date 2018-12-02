@@ -5,8 +5,10 @@ using System.Text;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(AudioSource))]
 public class Car : MonoBehaviour, IBulletDamageable, IZombieDamageable
 {
+	private new AudioSource audio;
 	private Animator anim;
 	public float maxHealth;
 	private float _health;
@@ -22,13 +24,16 @@ public class Car : MonoBehaviour, IBulletDamageable, IZombieDamageable
 	public void Awake()
 	{
 		this.anim = this.GetComponent<Animator>();
+		this.audio = this.GetComponent<AudioSource>();
 		this.Health = maxHealth;
 	}
 
 	public void TakeBulletDamages(float damage)
 	{
+		if (this.IsDestroyed()) return;
 		this.Damage(damage);
 		GameController.Instance.LaunchWave();
+		this.audio.Play();
 		this.anim.SetBool("Alarm", true);
 	}
 
@@ -42,6 +47,7 @@ public class Car : MonoBehaviour, IBulletDamageable, IZombieDamageable
 		this.Health -= damage;
 		if (this.Health <= 0)
 		{
+			this.StopAlarm();
 			this.anim.SetTrigger("Explode");
 			GameController.Instance.GameOver("Your car exploded");
 		}
@@ -50,6 +56,7 @@ public class Car : MonoBehaviour, IBulletDamageable, IZombieDamageable
 	public void StopAlarm()
 	{
 		this.anim.SetBool("Alarm", false);
+		this.audio.Stop();
 	}
 
 	public Transform Transform()

@@ -28,21 +28,21 @@ public class CarPanel : MonoBehaviour
 
 	public void LetFood()
 	{
-		GameController.Instance.LetRation();
+		UISoundManager.Instance.PlayButtonSound(GameController.Instance.LetRation());
 	}
 
 	public void LetFuel()
 	{
-		GameController.Instance.LetFuel();
+		UISoundManager.Instance.PlayButtonSound(GameController.Instance.LetFuel());
 	}
 
 	public void TakeFood()
 	{
-		GameController.Instance.TakeRation();
+		UISoundManager.Instance.PlayButtonSound(GameController.Instance.TakeRation());
 	}
 
 	public void TakeFuel()
 	{
-		GameController.Instance.TakeFuel();
+		UISoundManager.Instance.PlayButtonSound(GameController.Instance.TakeFuel());
 	}
 }

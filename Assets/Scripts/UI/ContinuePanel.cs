@@ -16,6 +16,7 @@ public class ContinuePanel : MonoBehaviour
 
 	public void Continue()
 	{
+		UISoundManager.Instance.PlayOk();
 		GameController.Instance.GotoNextHalt();
 	}
 }

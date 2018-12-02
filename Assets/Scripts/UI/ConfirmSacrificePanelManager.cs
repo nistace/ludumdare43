@@ -39,12 +39,16 @@ public class ConfirmSacrificePanelManager : MonoBehaviour
 
 	public void ConfirmSacrifice()
 	{
-		GameController.Instance.Sacrifice(this.character);
+		if (GameController.Instance.Sacrifice(this.character))
+		{
+			UISoundManager.Instance.Play("sacrifice_" + this.character.characterName);
+		}
 		this.gameObject.SetActive(false);
 	}
 
 	public void CancelSacrifice()
 	{
+		UISoundManager.Instance.PlayOk();
 		this.gameObject.SetActive(false);
 	}
 }

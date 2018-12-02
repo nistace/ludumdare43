@@ -76,6 +76,7 @@ public class GameController : MonoBehaviour
 	public event Action OnGameDataChanged = delegate { };
 	public event Action OnWaveFinished = delegate { };
 	public event Action OnGotoNextHalt = delegate { };
+	public event Action OnLaunchWave = delegate { };
 
 	public void Awake()
 	{
@@ -85,6 +86,7 @@ public class GameController : MonoBehaviour
 		{
 			this.zombieSpawner = this.GetComponent<ZombieSpawner>();
 			this.playerControls = this.player.GetComponent<ControlsManager>();
+			this.playerControls.enabled = false;
 		}
 	}
 
@@ -97,6 +99,8 @@ public class GameController : MonoBehaviour
 	{
 		this.playerControls.enabled = false;
 		Time.timeScale = 0;
+		this.car.StopAlarm();
+		MusicManager.Instance.PlaySlow(); ;
 		this.OnGameOver(reason, this.Miles);
 	}
 
@@ -122,8 +126,10 @@ public class GameController : MonoBehaviour
 
 	private void OnWaveLastZombieKilled()
 	{
+		MusicManager.Instance.PlaySlow();
 		this.playerControls.enabled = false;
 		this.player.hungry = true;
+		this.car.StopAlarm();
 		this.UpdateOtherCharacters();
 		float lootLowerBound = Mathf.Max(0, -1.5f * this.Wave + 16);
 		float lootUpperBound = 1 + 30 / Mathf.Sqrt(this.Wave);
@@ -160,7 +166,7 @@ public class GameController : MonoBehaviour
 			this.fuel = 0;
 			this.Wave++;
 			this.WaveRemainingTime = 30;
-			this.zombieSpawner.frequency = .5f + this.Wave;
+			this.zombieSpawner.frequency = this.Wave / 2 + (this.otherCharacters.Length + 1) / 2;
 			this.OnGotoNextHalt();
 			this.playerControls.enabled = true;
 		}
@@ -184,70 +190,66 @@ public class GameController : MonoBehaviour
 	{
 		if (!this.waveIsActive)
 		{
+			MusicManager.Instance.PlayFast();
 			this.zombieSpawner.active = true;
 			this.waveIsActive = true;
+			this.OnLaunchWave();
 		}
 	}
 
-	public void GiveSmallRation(HumanCharacter character)
+	public bool GiveSmallRation(HumanCharacter character)
 	{
-		if (this.rations > 0)
-		{
-			this.rations--;
-			character.hungry = false;
-			this.OnGameDataChanged();
-		}
+		if (this.rations <= 0) return false;
+		this.rations--;
+		character.hungry = false;
+		this.OnGameDataChanged();
+		return true;
 	}
 
-	public void GiveFullRation(HumanCharacter character)
+	public bool GiveFullRation(HumanCharacter character)
 	{
-		if (this.rations > 1)
-		{
-			this.rations -= 2;
-			character.hungry = false;
-			character.Health += 20;
-			this.OnGameDataChanged();
-		}
+		if (this.rations <= 1) return false;
+		this.rations -= 2;
+		character.hungry = false;
+		character.Health += 20;
+		this.OnGameDataChanged();
+		return true;
 	}
 
-	public void LetRation()
+	public bool LetRation()
 	{
-		if (this.rations > 0)
-		{
-			this.rationsLeftBehind++;
-			this.rations--;
-			this.OnGameDataChanged();
-		}
+		if (this.rations <= 0) return false;
+		this.rationsLeftBehind++;
+		this.rations--;
+		this.OnGameDataChanged();
+		return true;
 	}
 
-	public void TakeRation()
+	public bool TakeRation()
 	{
-		if (this.rationsLeftBehind > 0)
-		{
-			this.rationsLeftBehind--;
-			this.rations++;
-			this.OnGameDataChanged();
-		}
+		if (this.rationsLeftBehind <= 0) return false;
+		this.rationsLeftBehind--;
+		this.rations++;
+		this.OnGameDataChanged();
+		return true;
 	}
 
-	public void LetFuel()
+	public bool LetFuel()
 	{
-		if (this.fuel > 0)
-		{
-			this.fuelLeftBehind++;
-			this.fuel--;
-			this.OnGameDataChanged();
-		}
+		if (this.fuel <= 0) return false;
+		this.fuelLeftBehind++;
+		this.fuel--;
+		this.OnGameDataChanged();
+		return true;
 	}
 
-	public void TakeFuel()
+	public bool TakeFuel()
 	{
-		if (this.fuelLeftBehind > 0)
-		{
-			this.fuelLeftBehind--;
-			this.fuel++;
-			this.OnGameDataChanged();
-		}
+		if (this.fuelLeftBehind <= 0) return false;
+		this.fuelLeftBehind--;
+		this.fuel++;
+		this.OnGameDataChanged();
+		return true;
 	}
 
 	public int GetStorageCapacity()
@@ -255,14 +257,13 @@ public class GameController : MonoBehaviour
 		return 70 - this.otherCharacters.Length * 10;
 	}
 
-	public void Sacrifice(HumanCharacter character)
+	public bool Sacrifice(HumanCharacter character)
 	{
-		if (!character.IsDestroyed())
-		{
-			character.Health = 0;
-			this.UpdateOtherCharacters();
-			this.rations += 9;
-			this.OnGameDataChanged();
-		}
+		if (character.IsDestroyed()) return false;
+		character.Health = 0;
+		this.UpdateOtherCharacters();
+		this.rations += 9;
+		this.OnGameDataChanged();
+		return true;
 	}
 }
