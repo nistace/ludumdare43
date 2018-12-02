@@ -31,6 +31,7 @@ public class GameOverPanelManager : MonoBehaviour
 	public void EndGame()
 	{
 		UISoundManager.Instance.PlayOk();
+		Time.timeScale = 1;
 		App.Instance.GotoMenu();
 	}
 
