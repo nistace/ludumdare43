@@ -17,7 +17,8 @@ public class CarPanel : MonoBehaviour
 	{
 		int totalStored = GameController.Instance.rations + GameController.Instance.fuel;
 		this.capacityText.text = totalStored + " / " + GameController.Instance.GetStorageCapacity();
-		this.capacityText.color = totalStored <= GameController.Instance.GetStorageCapacity() ? GameController.UiDefaultTextColor : GameController.UiWarningTextColor;
+		this.capacityText.color = totalStored > GameController.Instance.GetStorageCapacity() ? GameController.UiWarningTextColor : GameController.UiDefaultTextColor;
+		this.capacityText.fontStyle = totalStored > GameController.Instance.GetStorageCapacity() ? FontStyle.Bold : FontStyle.Normal;
 		this.foodText.text = GameController.Instance.rations.ToString();
 		this.fuelText.text = GameController.Instance.fuel.ToString();
 		this.foodLeftBehindText.text = GameController.Instance.rationsLeftBehind.ToString();
