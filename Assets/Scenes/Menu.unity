@@ -1356,7 +1356,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Human meat is very nourishing
+  m_Text: Human Meat Is Very Nourishing
 --- !u!222 &1130062716
 CanvasRenderer:
   m_ObjectHideFlags: 0

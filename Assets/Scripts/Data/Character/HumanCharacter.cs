@@ -18,12 +18,19 @@ public class HumanCharacter : MonoBehaviour, IZombieDamageable, IBulletDamageabl
 		get { return this._health; }
 		set { this._health = Mathf.Min(value, this.maxHealth); this.OnHealthChanged(this._health); }
 	}
+
 	public bool hungry = true;
 
 	public string[] prosKeepAlive;
 	public string[] consKeepAlive;
 
+	public string[] thingsToSayOnBulletDamage;
+	public string[] thingsToSayOnZombieDamage;
+	public string[] thingsToSayOnDie;
+	private float timeBeforeSayingNewStuff;
+
 	public event Action<float> OnHealthChanged = delegate { };
+	public event Action<string, float> OnSaySomething = delegate { };
 
 	public void Awake()
 	{
@@ -34,6 +41,7 @@ public class HumanCharacter : MonoBehaviour, IZombieDamageable, IBulletDamageabl
 
 	public void Update()
 	{
+		this.timeBeforeSayingNewStuff -= Time.deltaTime;
 		if (this.Health <= 0)
 			this.Die();
 		if (this.transform.position.sqrMagnitude > this.sqrAllowedRadiusAroundCar)
@@ -43,15 +51,26 @@ public class HumanCharacter : MonoBehaviour, IZombieDamageable, IBulletDamageabl
 	public void TakeZombieDamages(float damage)
 	{
 		this.Health -= damage;
+		this.SaySomething(this.thingsToSayOnZombieDamage);
 	}
 
 	public void TakeBulletDamages(float damage)
 	{
-		Debug.Log("Careful!");
+		this.SaySomething(this.thingsToSayOnBulletDamage);
+	}
+
+	private void SaySomething(string[] values)
+	{
+		if (this.timeBeforeSayingNewStuff <= 0)
+		{
+			this.OnSaySomething(values[UnityEngine.Random.Range(0, values.Length)], 4);
+			this.timeBeforeSayingNewStuff = 6;
+		}
 	}
 
 	private void Die()
 	{
+		this.SaySomething(this.thingsToSayOnDie);
 		this.anim.SetTrigger("Die");
 		Destroy(this.GetComponent<Collider2D>());
 		this.GetComponent<Shooter>().enabled = false;
