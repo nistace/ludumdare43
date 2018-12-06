@@ -66,6 +66,7 @@ public class GameController : MonoBehaviour
 	public Car car;
 	public HumanCharacter player;
 	private ControlsManager playerControls;
+	private Shooter playerShooter;
 	public HumanCharacter[] otherCharacters;
 
 	public event Action<int> OnWaveCountChanged = delegate { };
@@ -87,7 +88,9 @@ public class GameController : MonoBehaviour
 		{
 			this.zombieSpawner = this.GetComponent<ZombieSpawner>();
 			this.playerControls = this.player.GetComponent<ControlsManager>();
+			this.playerShooter = this.player.GetComponent<Shooter>();
 			this.playerControls.enabled = false;
+			this.playerShooter.enabled = true;
 		}
 	}
 
@@ -99,6 +102,7 @@ public class GameController : MonoBehaviour
 	public void GameOver(string reason)
 	{
 		this.playerControls.enabled = false;
+		this.playerShooter.enabled = false;
 		Time.timeScale = 0;
 		this.car.StopAlarm();
 		MusicManager.Instance.PlaySlow(); ;
@@ -128,6 +132,7 @@ public class GameController : MonoBehaviour
 	private void OnWaveLastZombieKilled()
 	{
 		MusicManager.Instance.PlaySlow();
+		this.playerShooter.enabled = false;
 		this.playerControls.enabled = false;
 		this.player.hungry = true;
 		this.car.StopAlarm();
@@ -194,6 +199,7 @@ public class GameController : MonoBehaviour
 	public void StartNextHalt()
 	{
 		this.playerControls.enabled = true;
+		this.playerShooter.enabled = true;
 	}
 
 	private void RepositionateTeamMembers()
